@@ -102,12 +102,14 @@
         }
         for (int i = 0 ; i < self.imageViewArray.count; i ++){
             UIImageView * MLImageVIew = (UIImageView *)self.imageViewArray[i];
-            [MLImageVIew sd_setImageWithURL:[NSURL URLWithString:self.imageStrArray[i]] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
-                NSLog(@"缓存这个图片方式-->%ld",cacheType);
-                if (image && !error){
-                    [self pictureLayoutWithImage:image andWithIndex:i];
-                }
-            }];
+
+            NSData * data = [[NSData alloc] initWithContentsOfURL:[NSURL URLWithString:self.imageStrArray[i]]];
+            
+            UIImage * image = [UIImage imageWithData:data];
+            MLImageVIew.image = image;
+            if (image){
+                 [self pictureLayoutWithImage:image andWithIndex:i];
+            }
         }
         CGPoint point = CGPointMake(self.detailRect.size.width * self.selectIndex, 0);
         self.rotatScrollView.contentOffset = point;
